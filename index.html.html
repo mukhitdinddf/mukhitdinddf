@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coca-Cola System — Внутренний портал продаж (Desktop)</title>
+    <style>
+         :root {
+            --coca-cola-red: #e41e2b;
+            --dark-red: #b3121d;
+            --sidebar-width: 260px;
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --radius-lg: 12px;
+            --radius-md: 8px;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07)
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden
+        }
+        
+        aside.sidebar {
+            width: var(--sidebar-width);
+            background-color: #1e293b;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 100
+        }
+        
+        .sidebar-brand {
+            padding: 24px 20px;
+            background-color: var(--coca-cola-red);
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 20px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex-grow: 1
+        }
+        
+        .sidebar-menu li a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: var(--radius-md);
+            transition: all 0.2s ease
+        }
+        
+        .sidebar-menu li a:hover,
+        .sidebar-menu li a.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ffffff
+        }
+        
+        .sidebar-menu li a.active {
+            border-left: 4px solid var(--coca-cola-red)
+        }
+        
+        .user-widget {
+            padding: 16px 20px;
+            border-top: 1px solid #334155;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background-color: #0f172a
+        }
+        
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--coca-cola-red);
+            color: white;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem
+        }
+        
+        .user-info .name {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #ffffff
+        }
+        
+        .user-info .role {
+            font-size: 0.75rem;
+            color: #94a3b8
+        }
+        
+        main.main-content {
+            margin-left: var(--sidebar-width);
+            flex-grow: 1;
+            padding: 32px 40px;
+            max-width: 1600px
+        }
+        
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+            background-color: var(--card-bg);
+            padding: 16px 24px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm)
+        }
+        
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: var(--bg-color);
+            padding: 8px 16px;
+            border-radius: var(--radius-md);
+            width: 360px;
+            border: 1px solid var(--border-color)
+        }
+        
+        .search-box input {
+            border: none;
+            background: transparent;
+            outline: none;
+            width: 100%;
+            font-size: 0.85rem
+        }
+        
+        .top-actions {
+            display: flex;
+            gap: 16px;
+            align-items: center
+        }
+        
+        .date-badge {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            background-color: var(--bg-color);
+            padding: 6px 12px;
+            border-radius: var(--radius-md)
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2.2fr 1fr;
+            gap: 24px
+        }
+        
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px
+        }
+        
+        .kpi-card {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm)
+        }
+        
+        .kpi-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--text-muted);
+            letter-spacing: 0.5px
+        }
+        
+        .kpi-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin: 8px 0 4px
+        }
+        
+        .kpi-status {
+            font-size: 0.75rem;
+            font-weight: 600
+        }
+        
+        .status-positive {
+            color: #16a34a
+        }
+        
+        .status-neutral {
+            color: #ca8a04
+        }
+        
+        .card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+            padding: 24px;
+            margin-bottom: 24px
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color)
+        }
+        
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 700
+        }
+        
+        .promo-table-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px
+        }
+        
+        .promo-item {
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            background-color: #fff
+        }
+        
+        .promo-tag {
+            padding: 8px 12px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: #fff;
+            text-transform: uppercase;
+            display: flex;
+            justify-content: space-between
+        }
+        
+        .brand-coca-cola {
+            background-color: #e41e2b
+        }
+        
+        .brand-sprite {
+            background-color: #008b47
+        }
+        
+        .brand-fanta {
+            background-color: #ff6200
+        }
+        
+        .brand-piko {
+            background-color: #8c288e
+        }
+        
+        .brand-bonaqua {
+            background-color: #0072ce
+        }
+        
+        .brand-predator {
+            background-color: #111;
+            border-bottom: 2px solid #86c43f
+        }
+        
+        .promo-content {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex-grow: 1
+        }
+        
+        .promo-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 6px
+        }
+        
+        .promo-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+            margin-bottom: 12px
+        }
+        
+        .promo-footer {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            background-color: var(--bg-color);
+            padding: 6px 8px;
+            border-radius: 4px
+        }
+        
+        .leaderboard-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px
+        }
+        
+        .leader-row {
+            display: grid;
+            grid-template-columns: 30px 180px 1fr 60px;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.85rem
+        }
+        
+        .leader-rank {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: var(--bg-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.75rem
+        }
+        
+        .rank-1 {
+            background-color: #fef08a;
+            color: #854d0e
+        }
+        
+        .rank-2 {
+            background-color: #e2e8f0;
+            color: #334155
+        }
+        
+        .rank-3 {
+            background-color: #ffedd5;
+            color: #9a3412
+        }
+        
+        .leader-name {
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis
+        }
+        
+        .progress-bar-bg {
+            height: 10px;
+            background-color: var(--bg-color);
+            border-radius: 5px;
+            overflow: hidden;
+            width: 100%
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            background-color: var(--coca-cola-red);
+            border-radius: 5px
+        }
+        
+        .leader-val {
+            font-weight: 700;
+            text-align: right
+        }
+        
+        .filter-btn-group {
+            display: flex;
+            gap: 8px
+        }
+        
+        .filter-btn {
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: var(--radius-md);
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s
+        }
+        
+        .filter-btn.active,
+        .filter-btn:hover {
+            background-color: var(--coca-cola-red);
+            color: white;
+            border-color: var(--coca-cola-red)
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <span>Coca-Cola System</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 200" width="100%" height="100%">
+  <defs>
+    
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E41E2B"/>
+      <stop offset="100%" stop-color="#99000D"/>
+    </linearGradient>
+  </defs>
+
+ 
+  <rect width="500" height="200" rx="24" fill="url(#bgGrad)"/>
+
+ 
+  <path d="M 30 150 Q 250 190 470 150 Q 250 170 30 150 Z" fill="#FFFFFF" opacity="0.25" />
+
+ 
+  <g transform="translate(250, 115)" text-anchor="middle">
+    
+    <text font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" 
+          font-weight="900" 
+          font-size="64" 
+          letter-spacing="4" 
+          fill="#FFFFFF" 
+          font-style="italic">
+      QAZ COLA
+    </text>
+  
+    <text y="38" 
+          font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" 
+          font-weight="700" 
+          font-size="14" 
+          letter-spacing="6" 
+          fill="#FFD1D5" 
+          font-style="normal">
+      ORIGINAL TASTE
+    </text>
+  </g>
+</svg>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="Cola.html" class="active">📊 Панель управления</a></li>
+            <li><a href="#">🏷️ Акции и фокусы</a></li>
+            <li><a href="peple.html">👥 Сотрудники</a></li>
+            <li><a href="#">🏆 Рейтинг продаж</a></li>
+            <li><a href="kotolog.html">📦 Каталог продукции</a></li>
+            <li><a href="carta.html">📋 Мои маршруты</a></li>
+            <li><a href="#">⚙️ Настройки</a></li>
+        </ul>
+        <div class="user-widget">
+
+
+            <a href="reg.html">
+                <div class="avatar">МК</div>
+            </a>
+            <div class="user-info">
+                <div class="name">Мухитдин К.</div>
+                <div class="role">Торговый представитель</div>
+            </div>
+        </div>
+    </aside>
+
+
+    <main class="main-content">
+
+
+        <div class="top-bar">
+            <div class="search-box">
+                🔍 <input type="text" placeholder="Поиск по акциям, SKU или сотрудникам...">
+            </div>
+            <div class="top-actions">
+                <div class="date-badge">Сентябрь 2026</div>
+                <div class="avatar" style="width:32px; height:32px; font-size:0.75rem;">АЛМ</div>
+            </div>
+        </div>
+
+
+        <div class="kpi-row">
+            <div class="kpi-card">
+                <div class="kpi-title">Личный план</div>
+                <div class="kpi-value">112%</div>
+                <div class="kpi-status status-positive">▲ Выполнено (Цель: 100%)</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-title">Продажи отдела</div>
+                <div class="kpi-value">84.5%</div>
+                <div class="kpi-status status-neutral">● В пределах нормы</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-title">Активные торговые точки</div>
+                <div class="kpi-value">148 / 160</div>
+                <div class="kpi-status status-positive">92.5% покрытия</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-title">Дней до конца месяца</div>
+                <div class="kpi-value">12</div>
+                <div class="kpi-status status-neutral">Фокус: Piko & Predator</div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+
+            <section>
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Текущие промо-акции и спецпредложения</h2>
+                        <div class="filter-btn-group">
+                            <button class="filter-btn active">Все</button>
+                            <button class="filter-btn">Газировка</button>
+                            <button class="filter-btn">Соки (Piko)</button>
+                            <button class="filter-btn">Вода / Энергетики</button>
+                        </div>
+                    </div>
+
+                    <div class="promo-table-grid">
+
+                        <div class="promo-item">
+                            <div class="promo-tag brand-coca-cola">
+                                <span>Coca-Cola Classic</span>
+                                <span>10 + 1</span>
+                            </div>
+                            <div class="promo-content">
+                                <div class="promo-title">Объемный бонус 1.5L</div>
+                                <div class="promo-desc">Заказ 10 блоков Coca-Cola 1.5L дает 1 бонусный блок 0.5L бесплатно.</div>
+                                <div class="promo-footer">Срок: 01.09 — 30.09.2026</div>
+                            </div>
+                        </div>
+
+                        <div class="promo-item">
+                            <div class="promo-tag brand-sprite">
+                                <span>Sprite</span>
+                                <span>Скидка -15%</span>
+                            </div>
+                            <div class="promo-content">
+                                <div class="promo-title">Фокус на Sprite Cucumber</div>
+                                <div class="promo-desc">Скидка 15% при заказе от 20 ящиков любой фасовки.</div>
+                                <div class="promo-footer">Срок: 10.09 — 25.09.2026</div>
+                            </div>
+                        </div>
+
+                        <div class="promo-item">
+                            <div class="promo-tag brand-fanta">
+                                <span>Fanta</span>
+                                <span>Оборудование</span>
+                            </div>
+                            <div class="promo-content">
+                                <div class="promo-title">Фирменная стойка</div>
+                                <div class="promo-desc">Бесплатная установка брендированной стойки при заказе 15 блоков Fanta 1.0L.</div>
+                                <div class="promo-footer">Срок: До окончания стока</div>
+                            </div>
+                        </div>
+
+                        <div class="promo-item">
+                            <div class="promo-tag brand-piko">
+                                <span>Piko Juice</span>
+                                <span>Спеццена</span>
+                            </div>
+                            <div class="promo-content">
+                                <div class="promo-title">Школьный сезон (Piko Mini)</div>
+                                <div class="promo-desc">Специальный прайс-лист на детские форматы Piko 0.2L для ритейла категорий B и C.</div>
+                                <div class="promo-footer">Срок: 01.09 — 30.09.2026</div>
+                            </div>
+                        </div>
+
+                        <div class="promo-item">
+                            <div class="promo-tag brand-bonaqua">
+                                <span>Bonaqua</span>
+                                <span>Стандарт</span>
+                            </div>
+                            <div class="promo-content">
+                                <div class="promo-title">Приоритетная выкладка</div>
+                                <div class="promo-desc">Бонусная торговая скидка 5% за соблюдение стандарта "Золотая полка" (Bonaqua 0.5L/1.5L).</div>
+                                <div class="promo-footer">Срок: Постоянное промо</div>
+                            </div>
+                        </div>
+
+                        <div class="promo-item">
+                            <div class="promo-tag brand-predator">
+                                <span>Predator Energy</span>
+                                <span>Дисплей</span>
+                            </div>
+                            <div class="promo-content">
+                                <div class="promo-title">2+1 Дисплей-бокс</div>
+                                <div class="promo-desc">При покупке 2 ящиков Predator Gold — настольный мини-дисплей в подарок.</div>
+                                <div class="promo-footer">Срок: 15.09 — 15.10.2026</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <aside>
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Топ продаж филиала</h2>
+                    </div>
+
+                    <div class="leaderboard-list">
+
+                        <div class="leader-row">
+                            <div class="leader-rank rank-1">1</div>
+                            <div class="leader-name">Алексей Смирнов</div>
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill" style="width: 100%;"></div>
+                            </div>
+                            <div class="leader-val">142%</div>
+                        </div>
+
+                        <div class="leader-row">
+                            <div class="leader-rank rank-2">2</div>
+                            <div class="leader-name">Алихан Нурланов</div>
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill" style="width: 88%;"></div>
+                            </div>
+                            <div class="leader-val">128%</div>
+                        </div>
+
+                        <div class="leader-row">
+                            <div class="leader-rank rank-3">3</div>
+                            <div class="leader-name">Мухитдин К. (Вы)</div>
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill" style="width: 88%;"></div>
+                            </div>
+                            <div class="leader-val">112%</div>
+                        </div>
+                        <div class="leader-row">
+                            <div class="leader-rank rank-4">4</div>
+                            <div class="leader-name">Петров Даниил</div>
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill" style="width: 88%;"></div>
+                            </div>
+                            <div class="leader-val">105%</div>
+                        </div>
+                        <div class="leader-row">
+                            <div class="leader-rank rank-5">5</div>
+                            <div class="leader-name">Коротенко Вадислав</div>
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill" style="width: 88%;"></div>
+                            </div>
+                            <div class="leader-val">92%</div>
+                        </div>
